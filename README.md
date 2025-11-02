@@ -48,4 +48,43 @@ An intelligent quiz generator powered by **Gemini AI** that transforms any study
 
 ---
 
+# ⚔️ Brain Duel – You vs AI (for Fun Add-ons)
+## 🧠 An Interactive Quiz Game Where You Battle the AI for Knowledge Supremacy
 
+#🎯 Concept
+
+Brain Duel is a real-time quiz game that pits the player against an AI opponent.
+Both receive the same questions — but who can answer faster and smarter?
+
+The AI “thinks,” reacts, and even explains its answers after each round — creating a fun, competitive, and educational experience.
+
+# 🚀 Gameplay Overview
+Feature	Description
+⏳ Timed Rounds	Each question has a countdown timer (e.g., 15 seconds).
+
+🤖 AI Opponent	The AI “answers” with realistic delays and reasoning.
+
+🎯 Scoring System	+10 for correct answers, +5 speed bonus, -5 for wrong ones.
+
+💬 Answer Explanations	After every round, both your and the AI’s answers are explained.
+
+⚔️ Result Comparison	At the end, your score is compared with the AI’s — Winner declared!
+
+🔁 Rematch Option	Instantly start a new battle round.
+
+# 🧩 Example Round Flow
+
+Question:
+
+“Which planet is known as the Red Planet?”
+
+Countdown: ⏳ 15 → 14 → 13...
+
+Player: Clicks “Mars”
+AI: “🤖 AI chose Jupiter.”
+
+✅ Correct Answer: Mars
+
+🧠 Explanation: Mars appears red due to iron oxide on its surface.
+
+🏁 Scores: You +10 | AI 0
