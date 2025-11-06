@@ -1,7 +1,11 @@
+/* ================================
+   🌟 Global Styles
+   ================================ */
 body {
   background: #f5f7fa;
   font-family: "Segoe UI", Tahoma, sans-serif;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 header {
@@ -11,9 +15,28 @@ header {
   padding: 18px 0;
   font-size: 1.6rem;
   font-weight: 600;
+  position: relative;
 }
 header::before { content: "🧠 "; }
 
+/* Theme button */
+.theme-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.theme-btn:hover {
+  transform: scale(1.2);
+  color: #ffda79;
+}
+
+/* ================================
+   🧩 Main Container (auto height)
+   ================================ */
 main {
   max-width: 720px;
   margin: 40px auto;
@@ -22,18 +45,39 @@ main {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   position: relative;
+  transition: height 0.4s ease;
+  height: auto;
 }
 
-/* Slide pages */
+/* ================================
+   🔹 Slide Layouts (Auto Height)
+   ================================ */
 .page-container {
   display: flex;
-  width: 200%;
-  transition: transform 0.5s ease-in-out;
+  width: 300%;
+  transform: translateX(0%);
+  transition: transform 0.6s ease-in-out;
+  align-items: flex-start;
 }
-section { width: 50%; flex-shrink: 0; padding: 32px 24px; }
-.slide-home { transform: translateX(0%); }
-.slide-quiz { transform: translateX(-50%); }
 
+section {
+  width: 33.33%;
+  flex-shrink: 0;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: auto;
+}
+
+/* Slide states */
+.slide-home { transform: translateX(0%); }
+.slide-quiz { transform: translateX(-33.33%); }
+.slide-summary { transform: translateX(-66.66%); }
+
+/* ================================
+   🔹 Quiz Page Styling
+   ================================ */
 .question-block {
   background: #f8faff;
   border: 1px solid #e0e7f5;
@@ -43,17 +87,31 @@ section { width: 50%; flex-shrink: 0; padding: 32px 24px; }
   transition: border 0.3s ease;
 }
 
-.option { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0; }
-
-/* Expand/Collapse Button */
-.toggle-btn {
-  font-size: 0.85rem;
-  padding: 3px 8px;
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 8px;
   transition: all 0.2s ease;
 }
-.toggle-btn:hover { transform: scale(1.03); }
 
-/* Explanation slide animation */
+.option.border-success {
+  border-color: #28a745 !important;
+  background: #e9fbe9;
+}
+
+.option.border-danger {
+  border-color: #dc3545 !important;
+  background: #fdeaea;
+}
+
+.border-success { border: 2px solid #28a745 !important; }
+.border-danger { border: 2px solid #dc3545 !important; }
+
+/* Explanation inside Quiz Page */
 .explanation-slide {
   background: #eef4ff;
   border-left: 3px solid #007bff;
@@ -71,9 +129,9 @@ section { width: 50%; flex-shrink: 0; padding: 32px 24px; }
   padding: 0 10px;
 }
 
-.border-success { border: 2px solid #28a745 !important; }
-.border-danger { border: 2px solid #dc3545 !important; }
-
+/* ================================
+   🔹 Loader Overlay
+   ================================ */
 #loadingOverlay {
   position: fixed;
   top: 0; left: 0;
@@ -87,27 +145,122 @@ section { width: 50%; flex-shrink: 0; padding: 32px 24px; }
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-#loadingOverlay.show { display: flex; opacity: 1; }
+#loadingOverlay.show {
+  display: flex;
+  opacity: 1;
+}
 
 .hidden { display: none; }
 
-.option {
-  border: 1px solid transparent;
+/* ================================
+   🔹 Summary Layout (Layout 3)
+   ================================ */
+#summaryPage {
+  background: #f8faff;
+}
+
+.summary-card {
+  background: #ffffff;
+  border: 1px solid #e0e7f5;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.summary-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.summary-question {
+  font-weight: 600;
+  color: #2f67c8;
+}
+.summary-user {
+  margin-top: 6px;
+  font-weight: 500;
+}
+.summary-correct {
+  margin-top: 4px;
+  color: #198754;
+  font-weight: 500;
+}
+.summary-explanation {
+  margin-top: 8px;
+  font-style: italic;
+  color: #0d6efd;
+  background: #eef4ff;
+  padding: 8px 10px;
   border-radius: 6px;
-  padding: 4px 8px;
-  transition: all 0.2s ease;
+  border-left: 3px solid #0d6efd;
 }
 
-.option.border-success {
-  border-color: #28a745 !important;
-  background: #e9fbe9;
+/* ================================
+   🌙 Dark Theme Support
+   ================================ */
+body.dark {
+  background: #121212;
+  color: #f1f1f1;
 }
 
-.option.border-danger {
-  border-color: #dc3545 !important;
-  background: #fdeaea;
+body.dark header {
+  background: #1f1f1f;
+  color: #ffda79;
 }
 
-.result-icon {
-  font-size: 1.1rem;
+body.dark main {
+  background: #1e1e1e;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+}
+
+body.dark .question-block,
+body.dark .summary-card {
+  background: #222;
+  border: 1px solid #333;
+  color: #f1f1f1;
+}
+
+body.dark .summary-explanation {
+  background: #2b2b2b;
+  border-left-color: #ffda79;
+  color: #ffda79;
+}
+
+body.dark .btn-primary,
+body.dark .btn-success,
+body.dark .btn-secondary,
+body.dark .btn-warning {
+  color: #fff;
+  border: none;
+}
+
+body.dark .btn-primary { background: #3759d7; }
+body.dark .btn-success { background: #198754; }
+body.dark .btn-secondary { background: #555; }
+body.dark .btn-warning { background: #d8a824; }
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #2b2b2b;
+  color: #f1f1f1;
+  border: 1px solid #444;
+}
+
+body.dark .form-label,
+body.dark h4,
+body.dark p {
+  color: #f1f1f1;
+}
+
+/* ================================
+   🎛️ Button Hover & Transitions
+   ================================ */
+button.btn {
+  transition: all 0.3s ease;
+}
+button.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
