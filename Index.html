@@ -11,7 +11,10 @@
 </head>
 
 <body>
-  <header>Smart Quiz Generator</header>
+  <header>
+    Smart Quiz Generator
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </header>
 
   <main>
     <div class="page-container slide-home" id="pageContainer">
@@ -21,8 +24,8 @@
         <h4 class="mb-3 text-center">📄 Generate Your Quiz</h4>
         <form id="quizForm">
           <div class="mb-3">
-            <label class="form-label fw-semibold">Upload Notes (PDF / DOCX)</label>
-            <input id="file" type="file" accept=".pdf,.docx" class="form-control" />
+            <label class="form-label fw-semibold">Upload Notes (PDF / DOCX / TXT)</label>
+            <input id="file" type="file" accept=".pdf,.docx,.txt" class="form-control" />
           </div>
 
           <div class="mb-3">
@@ -47,6 +50,7 @@
 
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-lg">Generate Quiz</button>
+	    <button id="timerQuizBtn" class="btn btn-danger btn-lg mt-2">Timer Quiz</button>
           </div>
         </form>
       </section>
@@ -60,6 +64,18 @@
         <div class="d-flex gap-3 mt-4">
           <button id="showResults" class="btn btn-success flex-fill">Show Results</button>
           <button id="homeBtn" class="btn btn-secondary flex-fill">🏠 Go Home</button>
+        </div>
+      </section>
+
+      <!-- 🧠 Explanation / Summary Page -->
+      <section id="summaryPage">
+        <h4 class="mb-3 text-center text-primary fw-bold">📊 EXPLANATION</h4>
+        <div id="summaryContainer"></div>
+
+        <div class="d-flex gap-3 mt-4">
+          <button id="retryQuiz" class="btn btn-success flex-fill">🔁 Retry Quiz</button>
+	  <button id="regenerateBtn" class="btn btn-warning flex-fill">🔁 Regenerate Quiz</button>
+          <button id="goHome" class="btn btn-secondary flex-fill">🏠 Home</button>
         </div>
       </section>
     </div>
