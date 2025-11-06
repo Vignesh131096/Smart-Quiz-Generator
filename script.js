@@ -68,36 +68,15 @@ function renderQuiz(data) {
       <div class="question-block">
         <p><strong>Q${i + 1}:</strong> ${q.question}</p>
         ${optionsHTML}
-        <button class="toggle-btn btn btn-sm btn-outline-primary mt-2" data-index="${i}">Show Reason ▾</button>
-        <div class="explanation-slide hidden mt-2">
-          💡 ${q.explanation || "No explanation provided."}
-        </div>
       </div>`;
-  });
-
-  // Attach toggle events
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      const exp = document.querySelectorAll(".explanation-slide")[index];
-      const isHidden = exp.classList.toggle("hidden");
-
-      // Smooth slide animation
-      if (!isHidden) {
-        exp.style.maxHeight = exp.scrollHeight + "px";
-        btn.textContent = "Hide Reason ▴";
-      } else {
-        exp.style.maxHeight = 0;
-        btn.textContent = "Show Reason ▾";
-      }
-    });
   });
 }
 
-// ✅ Results with explanations
+// ✅ Results with correct answers and unattended handling
 showResultsBtn.addEventListener("click", () => {
   let score = 0;
   const blocks = document.querySelectorAll(".question-block");
+  let unansweredCount = 0;
 
   quizData.forEach((q, i) => {
     const selected = document.querySelector(`input[name="q${i}"]:checked`);
@@ -105,15 +84,34 @@ showResultsBtn.addEventListener("click", () => {
     const correctAns = (q.answer || "").trim().toUpperCase();
     const block = blocks[i];
 
-    if (userAns === correctAns) {
+    if (!userAns) {
+      unansweredCount++;
+      block.classList.add("border-warning");
+      block.insertAdjacentHTML("beforeend",
+        `<p class="text-warning mt-2">⚠️ Unattended — Correct Answer: <strong>${correctAns}</strong></p>`
+      );
+    } else if (userAns === correctAns) {
       score++;
       block.classList.add("border-success");
+      block.insertAdjacentHTML("beforeend",
+        `<p class="text-success mt-2">✅ Correct!</p>`
+      );
     } else {
       block.classList.add("border-danger");
+      block.insertAdjacentHTML("beforeend",
+        `<p class="text-danger mt-2">❌ Wrong — Correct Answer: <strong>${correctAns}</strong></p>`
+      );
     }
   });
 
-  resultSummary.innerHTML = `<h5 class="text-center">✅ You got ${score} / ${quizData.length} correct!</h5>`;
+  if (unansweredCount > 0) {
+    const confirmSubmit = confirm(
+      `⚠️ You left ${unansweredCount} question(s) unattended.\n\nDo you still want to submit? (Unattended will be marked wrong)`
+    );
+    if (!confirmSubmit) return;
+  }
+
+  resultSummary.innerHTML = `<h5 class="text-center mt-3">✅ You got ${score} / ${quizData.length} correct!</h5>`;
   resultSummary.classList.remove("hidden");
   resultSummary.scrollIntoView({ behavior: "smooth" });
 });
