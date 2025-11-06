@@ -13,3 +13,6 @@ If they miss any, the system asks whether to attend all or submit early (unanswe
 
 ✅ Instant Results & Feedback
 After submission, answers are highlighted — ✅ correct in green, ❌ wrong/unattended in red — with smooth transitions and an easy navigation back to home.
+
+✅ Dark/ Light Theme
+The Ui will be automatically changed inbetween light / dark theme by clicking simple button (🌙)
