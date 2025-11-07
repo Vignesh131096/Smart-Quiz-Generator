@@ -249,24 +249,7 @@ themeToggle.addEventListener("click", () => {
   localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
-document.getElementById("timerQuizBtn").addEventListener("click", () => {
-    const file = fileInput.files[0] || null;
-    const link = linkInput.value.trim() || ""; // ← changed from null to empty string
-    const questions = numQuestions.value || 5;
-    const levelSelected = level.value || "Medium";
-
-    if (!file && !link) {
-        alert("⚠️ Please upload a file or paste a link before starting timer quiz.");
-        return;
-    }
-
-    // Save input in sessionStorage for timer quiz page
-    sessionStorage.setItem("timerQuizFile", file ? URL.createObjectURL(file) : "");
-    sessionStorage.setItem("timerQuizLink", link);
-    sessionStorage.setItem("timerQuizNumQuestions", questions);
-    sessionStorage.setItem("timerQuizLevel", levelSelected);
-
-    // Navigate to timer quiz page
-    window.location.href = "timer-quiz.html";
+document.getElementById("goToTimerQuizBtn").addEventListener("click", () => {
+  window.location.href = "timer-quiz.html";
 });
 
