@@ -6,7 +6,6 @@ const numQuestions = document.getElementById("numQuestions");
 const level = document.getElementById("level");
 const pageContainer = document.getElementById("pageContainer");
 const quizContainer = document.getElementById("quizContainer");
-const showResultsBtn = document.getElementById("showResults");
 const homeBtn = document.getElementById("homeBtn");
 const resultSummary = document.getElementById("resultSummary");
 const loadingOverlay = document.getElementById("loadingOverlay");
@@ -71,10 +70,20 @@ function renderQuiz(data) {
         ${optionsHTML}
       </div>`;
   });
+
+  // Add only the Submit button at the bottom
+  quizContainer.innerHTML += `
+    <div class="text-center mt-4">
+      <button id="submitQuizBtn" class="btn btn-danger btn-lg">Submit Quiz</button>
+    </div>
+  `;
+
+  // Add event listener to the new submit button
+  document.getElementById("submitQuizBtn").addEventListener("click", showResults);
 }
 
 // ✅ Results with correct answers
-showResultsBtn.addEventListener("click", () => {
+function showResults() {
   let score = 0;
   const blocks = document.querySelectorAll(".question-block");
   let unansweredCount = 0;
@@ -110,10 +119,9 @@ showResultsBtn.addEventListener("click", () => {
 
   resultSummary.innerHTML = `<h5 class="text-center mt-3">✅ You got ${score} / ${quizData.length} correct!</h5>`;
   resultSummary.classList.remove("hidden");
-  resultSummary.scrollIntoView({ behavior: "smooth" });
 
   setTimeout(showSummaryPage, 1200);
-});
+}
 
 // 🧠 Show Explanation Summary (Layout 3)
 function showSummaryPage() {
@@ -125,19 +133,25 @@ function showSummaryPage() {
     const userAns = selected ? selected.value : "Unattended";
     const correctAns = (q.answer || "").trim().toUpperCase();
     const isCorrect = userAns === correctAns;
+    
+    // Get the actual option texts
+    const userAnswerText = userAns !== "Unattended" 
+      ? q.options[userAns.charCodeAt(0) - 65] 
+      : "Unattended";
+    const correctAnswerText = q.options[correctAns.charCodeAt(0) - 65];
 
     const explanationText = isCorrect
-      ? `✅ ${correctAns} is correct because it matches the key concept in your notes.`
-      : `❌ You selected ${userAns}, but ${correctAns} is correct based on the provided content.`;
+      ? `✅ ${correctAns} (${correctAnswerText}) is correct because it matches the key concept in your notes.`
+      : `❌ You selected ${userAns} (${userAnswerText}), but ${correctAns} (${correctAnswerText}) is correct based on the provided content.`;
 
     const card = document.createElement("div");
     card.className = "summary-card";
     card.innerHTML = `
       <div class="summary-question">Q${i + 1}. ${q.question}</div>
       <div class="summary-user ${isCorrect ? 'text-success' : 'text-danger'}">
-        Your Answer: ${userAns}
+        Your Answer: ${userAns} - ${userAnswerText}
       </div>
-      <div class="summary-correct">Correct Answer: ${correctAns}</div>
+      <div class="summary-correct">Correct Answer: ${correctAns} - ${correctAnswerText}</div>
       <div class="summary-explanation">💬 ${explanationText}</div>
     `;
     summaryContainer.appendChild(card);
@@ -164,7 +178,7 @@ document.getElementById("goHome").addEventListener("click", () => {
 
 
 // 🔁 Regenerate Quiz (After Results)
-const regenAfterResult = document.getElementById("regenAfterResult");
+const regenAfterResult = document.getElementById("regenerateBtn");
 
 if (regenAfterResult) {
   regenAfterResult.addEventListener("click", async () => {
@@ -199,7 +213,6 @@ if (regenAfterResult) {
       pageContainer.classList.remove("slide-summary");
       pageContainer.classList.add("slide-quiz");
       resultSummary.classList.add("hidden");
-      quizContainer.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
       hideLoader();
       alert("❌ Failed to regenerate quiz. Check backend connection.");
@@ -219,8 +232,9 @@ function adjustMainHeight() {
   else if (activeClass === "slide-quiz") activeSection = pageSections[1];
   else if (activeClass === "slide-summary") activeSection = pageSections[2];
   if (activeSection) {
-    const newHeight = activeSection.scrollHeight;
+    const newHeight = activeSection.scrollHeight + 100;
     mainContainer.style.height = `${newHeight}px`;
+    mainContainer.style.minHeight = `${newHeight}px`;
   }
 }
 
@@ -252,4 +266,3 @@ themeToggle.addEventListener("click", () => {
 document.getElementById("goToTimerQuizBtn").addEventListener("click", () => {
   window.location.href = "timer-quiz.html";
 });
-
