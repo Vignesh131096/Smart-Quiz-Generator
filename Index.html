@@ -50,7 +50,7 @@
 
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-lg">Generate Quiz</button>
-	    <button id="goToTimerQuizBtn" class="btn btn-danger btn-lg mt-2">Go to Timed Quiz</button>
+            <button id="goToTimerQuizBtn" type="button" class="btn btn-danger btn-lg mt-2">Go to Timed Quiz</button>
           </div>
         </form>
       </section>
@@ -60,11 +60,7 @@
         <h4 class="mb-3 text-center">🧩 Your Quiz</h4>
         <div id="quizContainer"></div>
         <div id="resultSummary" class="hidden"></div>
-
-        <div class="d-flex gap-3 mt-4">
-          <button id="showResults" class="btn btn-success flex-fill">Show Results</button>
-          <button id="homeBtn" class="btn btn-secondary flex-fill">🏠 Go Home</button>
-        </div>
+        <!-- REMOVED: All buttons from quiz page - JavaScript will add Submit button -->
       </section>
 
       <!-- 🧠 Explanation / Summary Page -->
@@ -74,7 +70,7 @@
 
         <div class="d-flex gap-3 mt-4">
           <button id="retryQuiz" class="btn btn-success flex-fill">🔁 Retry Quiz</button>
-	  <button id="regenerateBtn" class="btn btn-warning flex-fill">🔁 Regenerate Quiz</button>
+          <button id="regenerateBtn" class="btn btn-warning flex-fill">🔁 Regenerate Quiz</button>
           <button id="goHome" class="btn btn-secondary flex-fill">🏠 Home</button>
         </div>
       </section>
