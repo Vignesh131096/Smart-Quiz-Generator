@@ -172,15 +172,22 @@ function submitQuiz() {
     const userAns = userAnswers[i] || "Unattended";
     const correctAns = (q.answer || "").trim().toUpperCase();
     const isCorrect = userAns === correctAns;
+    
+    // Get the actual option texts
+    const userAnswerText = userAns !== "Unattended" 
+      ? q.options[userAns.charCodeAt(0) - 65] 
+      : "Unattended";
+    const correctAnswerText = q.options[correctAns.charCodeAt(0) - 65];
+    
     const explanation = isCorrect
       ? `✅ Correct because it matches the key concept.`
-      : `❌ Your answer: ${userAns}, correct answer: ${correctAns}`;
+      : `❌ Your answer: ${userAns} (${userAnswerText}), correct answer: ${correctAns} (${correctAnswerText})`;
 
     resultHTML += `
       <div class="question-block">
         <div><strong>Q${i + 1}:</strong> ${q.question}</div>
-        <div>Your Answer: <span class="${isCorrect ? "text-success" : "text-danger"}">${userAns}</span></div>
-        <div>Correct Answer: <span class="text-success">${correctAns}</span></div>
+        <div>Your Answer: <span class="${isCorrect ? "text-success" : "text-danger"}">${userAns} - ${userAnswerText}</span></div>
+        <div>Correct Answer: <span class="text-success">${correctAns} - ${correctAnswerText}</span></div>
         <div class="mt-1"><em>${explanation}</em></div>
       </div>
     `;
