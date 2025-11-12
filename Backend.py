@@ -101,31 +101,71 @@ def extract_text_from_webpage(url):
 
 
 def extract_text_from_youtube(url):
-    """Extract subtitles from YouTube using yt-dlp."""
+    """Extract subtitles from YouTube using yt-dlp with better debugging."""
     try:
         print(f"🎥 Fetching captions via yt-dlp for: {url}")
         ydl_opts = {
             "skip_download": True,
             "writesubtitles": True,
             "writeautomaticsub": True,
-            "subtitleslangs": ["en"],
-            "quiet": True,
+            "subtitleslangs": ["en", "a.en"],  # Try both formats
+            "quiet": False,  # Keep False to see what's happening
         }
+        
         with tempfile.TemporaryDirectory() as tmpdirname:
-            ydl_opts["outtmpl"] = os.path.join(tmpdirname, "%(id)s.%(ext)s")
+            ydl_opts["outtmpl"] = os.path.join(tmpdirname, "%(id)s")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=False)
-                subtitles = info.get("subtitles", {}) or info.get("automatic_captions", {})
-                if not subtitles:
-                    return None
-                lang, entries = list(subtitles.items())[0]
-                if not entries or "url" not in entries[0]:
-                    return None
-                caption_url = entries[0]["url"]
-                caption_text = requests.get(caption_url).text
-                return caption_text.strip()
+                
+                print(f"📊 Video title: {info.get('title', 'Unknown')}")
+                
+                # Debug: Print available subtitle languages
+                subtitles = info.get("subtitles", {})
+                automatic_captions = info.get("automatic_captions", {})
+                
+                print(f"🗣️ Available subtitles: {list(subtitles.keys())}")
+                print(f"🤖 Automatic captions: {list(automatic_captions.keys())}")
+                
+                # Try to get English subtitles in order of preference
+                subtitle_sources = [
+                    ("manual subtitles", subtitles),
+                    ("automatic captions", automatic_captions)
+                ]
+                
+                for source_name, source_dict in subtitle_sources:
+                    for lang in ["en", "a.en"]:  # Try both English formats
+                        if lang in source_dict and source_dict[lang]:
+                            subtitle_url = source_dict[lang][0]["url"]
+                            print(f"✅ Found {source_name} in {lang}")
+                            
+                            # Download the subtitle content
+                            response = requests.get(subtitle_url)
+                            if response.status_code == 200:
+                                caption_text = response.text
+                                print(f"📝 Successfully extracted {len(caption_text)} characters")
+                                return caption_text.strip()
+                            else:
+                                print(f"❌ Failed to download subtitles: HTTP {response.status_code}")
+                
+                print("❌ No English subtitles or captions available for this video")
+                return None
+                
     except Exception as e:
         print(f"❌ YouTube extract failed: {e}")
+        return None
+
+
+def extract_youtube_fallback(url):
+    """Fallback: Extract video title and description as text."""
+    try:
+        ydl_opts = {'skip_download': True, 'quiet': True}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            title = info.get('title', '')
+            description = info.get('description', '')[:2000]  # Limit description length
+            return f"{title}. {description}"
+    except Exception as e:
+        print(f"❌ YouTube fallback failed: {e}")
         return None
 
 
@@ -197,6 +237,10 @@ async def generate_quiz(
         elif link:
             if "youtube.com" in link or "youtu.be" in link:
                 text_input = extract_text_from_youtube(link)
+                # If no captions found, try fallback
+                if not text_input:
+                    print("🔄 Trying YouTube fallback method...")
+                    text_input = extract_youtube_fallback(link)
             else:
                 text_input = extract_text_from_webpage(link)
 
