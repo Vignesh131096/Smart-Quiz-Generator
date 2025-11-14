@@ -134,7 +134,6 @@ function showSummaryPage() {
     const correctAns = (q.answer || "").trim().toUpperCase();
     const isCorrect = userAns === correctAns;
     
-    // Get the actual option texts
     const userAnswerText = userAns !== "Unattended" 
       ? q.options[userAns.charCodeAt(0) - 65] 
       : "Unattended";
@@ -175,7 +174,6 @@ document.getElementById("goHome").addEventListener("click", () => {
   resultSummary.classList.add("hidden");
   form.reset();
 });
-
 
 // 🔁 Regenerate Quiz (After Results)
 const regenAfterResult = document.getElementById("regenerateBtn");
@@ -220,7 +218,6 @@ if (regenAfterResult) {
   });
 }
 
-
 // 🧩 Auto-resize main container height on layout change
 const mainContainer = document.querySelector("main");
 const pageSections = document.querySelectorAll(".page-container > section");
@@ -245,24 +242,30 @@ observer.observe(pageContainer, { attributes: true, attributeFilter: ["class"] }
 // Initial adjustment
 window.addEventListener("load", adjustMainHeight);
 
-
-// 🌙 Theme Switcher
+// 🌙 Theme Switcher with Bootstrap Icons
 const themeToggle = document.getElementById("themeToggle");
+
+function setThemeIcon(isDark) {
+  themeToggle.innerHTML = isDark ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
+}
 
 // Load saved theme from localStorage
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
-  themeToggle.textContent = "🌞";
+  setThemeIcon(true);
+} else {
+  setThemeIcon(false);
 }
 
 // Toggle theme on click
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const isDark = document.body.classList.contains("dark");
-  themeToggle.textContent = isDark ? "🌞" : "🌙";
+  setThemeIcon(isDark);
   localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
+// Go to Timed Quiz button handler
 document.getElementById("goToTimerQuizBtn").addEventListener("click", () => {
   window.location.href = "timer-quiz.html";
 });
