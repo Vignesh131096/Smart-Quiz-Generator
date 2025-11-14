@@ -1,3 +1,4 @@
+// Timer Quiz Script with Bootstrap Icons for theme toggle
 const form = document.getElementById("timerQuizForm");
 const fileInput = document.getElementById("fileInput");
 const linkInput = document.getElementById("linkInput");
@@ -17,25 +18,26 @@ let timer;
 let timeLeft = 0;
 let userAnswers = [];
 
-// Theme management
+// Theme toggle icon setup
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
-  themeToggle.textContent = "🌞";
+  themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
 } else {
-  themeToggle.textContent = "🌙";
+  themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
 }
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const isDark = document.body.classList.contains("dark");
-  themeToggle.textContent = isDark ? "🌞" : "🌙";
+  themeToggle.innerHTML = isDark ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
   localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
+// Home button
 homeBtn.addEventListener("click", () => {
   window.location.href = "index.html";
 });
 
-// Start quiz generation on form submit
+// Generate quiz
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -172,13 +174,13 @@ function submitQuiz() {
     const userAns = userAnswers[i] || "Unattended";
     const correctAns = (q.answer || "").trim().toUpperCase();
     const isCorrect = userAns === correctAns;
-    
-    // Get the actual option texts
+
+    // Get the option text for answer
     const userAnswerText = userAns !== "Unattended" 
       ? q.options[userAns.charCodeAt(0) - 65] 
       : "Unattended";
     const correctAnswerText = q.options[correctAns.charCodeAt(0) - 65];
-    
+
     const explanation = isCorrect
       ? `✅ Correct because it matches the key concept.`
       : `❌ Your answer: ${userAns} (${userAnswerText}), correct answer: ${correctAns} (${correctAnswerText})`;
